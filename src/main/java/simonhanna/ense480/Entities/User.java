@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "user" )
+@Table(name = "user")
 public class User {
 
 	@Id
@@ -25,6 +25,8 @@ public class User {
 	
 	@OneToMany(mappedBy="user")
 	private List<Profile> profiles; 
+	
+	public User() {}
 	
 	public User(String alias) {
 		this.alias = alias;

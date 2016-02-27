@@ -1,5 +1,6 @@
 package simonhanna.ense480.Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "profile" )
+@Table(name = "profile")
 public class Profile {
 
 	@Id
@@ -28,7 +29,7 @@ public class Profile {
 	private User user;
 	
 	@OneToMany(mappedBy="profile")
-	private List<KeyMetric> keyMetrics; 
+	private List<KeyMetric> keyMetrics = new ArrayList<KeyMetric>();
 	
 	public void setProfilename(String profilename) {
 		this.profilename = profilename;
@@ -55,4 +56,29 @@ public class Profile {
 	public List<KeyMetric> getKeyMetrics() {
 		return keyMetrics;
 	}
+	public void setKeyMetrics(KeyMetric[][] profileMetrics) {
+		
+		if(keyMetrics.size() == 0) {
+			System.out.println("Adding new metrics");
+			
+			for(int i=0; i<10; i++) {
+				for(int j=0; j<10; j++) {
+					keyMetrics.add(profileMetrics[i][j]);
+				}
+			}
+		} else {
+			updateKeyMetrics(profileMetrics);
+			return;
+		}
+	}
+	
+	public void updateKeyMetrics(KeyMetric[][] profileMetrics) {
+		//TODO add a for each to update entries as needed
+		System.out.println("Would be updating metrics");
+	}
+	
+	public void displayKeyMetrics() {
+		
+	}
+	
 }

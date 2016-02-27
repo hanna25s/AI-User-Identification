@@ -6,6 +6,7 @@
       <properties>
 		<property name="hibernate.show_sql" value="true" />
 		<property name="hibernate.hbm2ddl.auto" value="update" />
+		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		
 		<property name="javax.persistence.jdbc.url" value="jdbc:mysql://ense480project.chdgoc9ealls.us-west-2.rds.amazonaws.com/ense480" />
         <property name="javax.persistence.jdbc.user" value="ense480" />

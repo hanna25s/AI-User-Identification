@@ -1,5 +1,6 @@
 package simonhanna.ense480;
 import simonhanna.ense480.DatabaseAccess;
+import simonhanna.ense480.Entities.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,10 +22,14 @@ public class ProfileCreation extends JFrame
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static Node[][] profile = new Node[10][10];
-	public char newKey;
-	public char oldKey;
-	public long startTime, endTime, timeBetweenKeys;
+	private static KeyMetric[][] keyMetrics = new KeyMetric[10][10];
+	private static User user;
+	private static Profile profile;
+	
+	private char newKey;
+	private char oldKey;
+	private long startTime, endTime, timeBetweenKeys;
+	
 	
 	JTextArea displayArea;
     JTextField typingArea;
@@ -32,9 +37,12 @@ public class ProfileCreation extends JFrame
     
     public static void main(String[] args) {
     	
+    	user = DatabaseAccess.getUser(1);
+    	profile = DatabaseAccess.getProfile(4);
+    	
     	for(int i=0; i<10; i++) {
     		for(int j=0; j<10; j++) {
-    			profile[i][j] = new Node();
+    			keyMetrics[i][j] = new KeyMetric(i, j, profile);
     		}
     	}
     	
@@ -110,17 +118,17 @@ public class ProfileCreation extends JFrame
     
     /** Handle the key pressed event from the text field. */
     public void keyPressed(KeyEvent e) {
-    	newKey = e.getKeyChar();
     	endTime = System.nanoTime();
+    	newKey = e.getKeyChar();
     	timeBetweenKeys = (endTime - startTime);
+    	    	
+    	KeyMetric keyMetric = keyMetrics[getKeyGroup(oldKey)][getKeyGroup(newKey)];
     	
-    	System.out.println("Old Key Group: " + getKeyGroup(oldKey));
-    	System.out.println("New Key Group: " + getKeyGroup(newKey));
-    	
-    	profile[getKeyGroup(oldKey)][getKeyGroup(newKey)].addOccurence(timeBetweenKeys);
-    	
-    	startTime = endTime;
+    	keyMetric.setTime(keyMetric.getTime() + timeBetweenKeys);
+    	keyMetric.setNumberOfOccurences(keyMetric.getNumberOfOccurences() + 1);
+
         displayInfo(e, "KEY PRESSED: ");
+        startTime = endTime;
         oldKey = newKey;
     }
    
@@ -133,9 +141,7 @@ public class ProfileCreation extends JFrame
     /** Handle the button click. */
     public void actionPerformed(ActionEvent e) {
         String profile = displayProfile();
-        
         displayArea.setText(profile);
-        
     }
    
     private void displayInfo(KeyEvent e, String keyStatus){
@@ -153,19 +159,22 @@ public class ProfileCreation extends JFrame
     
     private String displayProfile() {
     	String response = "";
+    	KeyMetric keyMetric = null;
+    	
+    	DatabaseAccess.updateKeyMetrics(profile, keyMetrics);
     	
     	for(int i=0; i<10; i++) {
     		response += "Row " + Integer.toString(i) + ":";
     		for(int j=0; j<10; j++) {
-    			if(profile[i][j].getNumberOfOccurences() == 0) {
+    			keyMetric = keyMetrics[i][j];
+    			if(keyMetric.getNumberOfOccurences() == 0) {
     				response += " 0000000000 ";
     			} else {
-    				response += " " + Long.toString(profile[i][j].getTime()/profile[i][j].getNumberOfOccurences()) + " ";
+    				response += " " + Long.toString(keyMetric.getTime()/keyMetric.getNumberOfOccurences()) + " ";
     			}
     		}
     		response += newline;
-    	}
-    	
+    	}	
     	return response;
     }
     
