@@ -1,7 +1,11 @@
-package simonhanna.ense480;
+package simonhanna.ense480.activities;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
-import simonhanna.ense480.Entities.*;
+
+import simonhanna.ense480.entities.*;
 
 public final class DatabaseAccess {
 	
@@ -30,6 +34,13 @@ public final class DatabaseAccess {
 		
 		entityManager.persist(profile);
 		entityManager.getTransaction().commit();
+	}
+	
+	public static List<User> getUserAliases() {
+		
+		List<User> users = new ArrayList<User>();
+		users = entityManager.createQuery("SELECT u FROM User u").getResultList();
+		return users;
 	}
 	
 	public static void updateKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
