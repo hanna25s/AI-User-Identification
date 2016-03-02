@@ -1,6 +1,9 @@
-package simonhanna.ense480;
-import simonhanna.ense480.DatabaseAccess;
-import simonhanna.ense480.Entities.*;
+package simonhanna.ense480.activities;
+import simonhanna.ense480.activities.DatabaseAccess;
+import simonhanna.ense480.entities.*;
+
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.structure.NeuralStructure;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,10 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class ProfileCreation extends JFrame
+public class ProfileActivity extends JFrame
 	implements KeyListener, ActionListener {
 	
 	private static final long serialVersionUID = 1L;
+	
+	
+	BasicNetwork network = new BasicNetwork();
+	NeuralStructure ns = new NeuralStructure(network);
 	
 	private static KeyMetric[][] keyMetrics = new KeyMetric[10][10];
 	private static User user;
@@ -28,7 +35,7 @@ public class ProfileCreation extends JFrame
 	
 	private char newKey;
 	private char oldKey;
-	private long startTime, endTime, timeBetweenKeys;
+	private double startTime, endTime, timeBetweenKeys;
 	
 	
 	JTextArea displayArea;
@@ -40,11 +47,9 @@ public class ProfileCreation extends JFrame
     	user = DatabaseAccess.getUser(1);
     	profile = DatabaseAccess.getProfile(4);
     	
-    	for(int i=0; i<10; i++) {
-    		for(int j=0; j<10; j++) {
-    			keyMetrics[i][j] = new KeyMetric(i, j, profile);
-    		}
-    	}
+    	initKeyMetrics();
+    	
+    	NeuralNetwork.createNeuralNetwork(profile.getKeyMetrics(), profile);
     	
         /* Use an appropriate Look and Feel */
         try {
@@ -77,7 +82,7 @@ public class ProfileCreation extends JFrame
      */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        ProfileCreation frame = new ProfileCreation("ProfileCreation");
+        ProfileActivity frame = new ProfileActivity("ProfileCreation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Set up the content pane.
@@ -106,9 +111,9 @@ public class ProfileCreation extends JFrame
         getContentPane().add(button, BorderLayout.PAGE_END);
     }
     
-    public ProfileCreation(String name) {
+    public ProfileActivity(String name) {
         super(name);
-        this.startTime = System.nanoTime();
+        this.startTime = (double)System.nanoTime()/1000000000.0;
     }
     
     
@@ -118,7 +123,7 @@ public class ProfileCreation extends JFrame
     
     /** Handle the key pressed event from the text field. */
     public void keyPressed(KeyEvent e) {
-    	endTime = System.nanoTime();
+    	endTime = (double)System.nanoTime()/1000000000.0;
     	newKey = e.getKeyChar();
     	timeBetweenKeys = (endTime - startTime);
     	    	
@@ -151,7 +156,7 @@ public class ProfileCreation extends JFrame
     	
     	String message = newline + "From " + start + " to " + end + newline
     			+ "oldKey: " + oldKey + newline + "newKey: " + newKey + newline
-    			+ "Time Between Keys: " + Long.toString(timeBetweenKeys) + newline;
+    			+ "Time Between Keys: " + Double.toString(timeBetweenKeys) + newline;
    
         displayArea.append(message);
         displayArea.setCaretPosition(displayArea.getDocument().getLength());
@@ -168,16 +173,24 @@ public class ProfileCreation extends JFrame
     		for(int j=0; j<10; j++) {
     			keyMetric = keyMetrics[i][j];
     			if(keyMetric.getNumberOfOccurences() == 0) {
-    				response += " 0000000000 ";
+    				response += " 0 ";
     			} else {
-    				response += " " + Long.toString(keyMetric.getTime()/keyMetric.getNumberOfOccurences()) + " ";
+    				response += " " + Double.toString(keyMetric.getTime()/keyMetric.getNumberOfOccurences()) + " ";
     			}
     		}
     		response += newline;
     	}	
-    	return response;
+    	initKeyMetrics();
+    	return response;    	
     }
     
+    public static void initKeyMetrics() {
+    	for(int i=0; i<10; i++) {
+    		for(int j=0; j<10; j++) {
+    			keyMetrics[i][j] = new KeyMetric(i, j, profile);
+    		}
+    	}
+    }
     
 	/**
 	 * getKeyGroup
