@@ -1,4 +1,4 @@
-package simonhanna.ense480.Entities;
+package simonhanna.ense480.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ public class KeyMetric {
 	@Column(name="endkey")
 	private int endKey;
 	
-	private long time;
+	private double time;
 	private int numberOfOccurences;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -43,7 +43,7 @@ public class KeyMetric {
 	public void setFrom(int from) {
 		this.startKey = from;
 	}
-	public void setTime(long time) {
+	public void setTime(double time) {
 		this.time = time;
 	}
 	public void setTo(int to) {
@@ -62,7 +62,7 @@ public class KeyMetric {
 	public int getKeymetricid() {
 		return keymetricid;
 	}
-	public long getTime() {
+	public double getTime() {
 		return time;
 	}
 	public int getTo() {

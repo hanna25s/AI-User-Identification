@@ -1,4 +1,4 @@
-package simonhanna.ense480.Entities;
+package simonhanna.ense480.entities;
 
 import java.util.List;
 
