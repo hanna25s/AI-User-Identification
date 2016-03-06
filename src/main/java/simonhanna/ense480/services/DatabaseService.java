@@ -1,21 +1,16 @@
-package simonhanna.ense480.activities;
+package simonhanna.ense480.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
-import simonhanna.ense480.entities.*;
+import simonhanna.ense480.models.*;
 
-public final class DatabaseAccess {
+public final class DatabaseService {
 	
 	private static final String UNIT_NAME = "simonhanna.ense480.aiproject";
 	private static EntityManager entityManager = Persistence.createEntityManagerFactory(UNIT_NAME).createEntityManager();
 	
-	public static EntityManager getEntityManager() {
-		return entityManager;
-	}
-
 	public static void addUser(String alias) {		
 		entityManager.getTransaction().begin();
 		
@@ -37,10 +32,7 @@ public final class DatabaseAccess {
 	}
 	
 	public static List<User> getUserAliases() {
-		
-		List<User> users = new ArrayList<User>();
-		users = entityManager.createQuery("SELECT u FROM User u").getResultList();
-		return users;
+		return entityManager.createQuery("SELECT u FROM User u").getResultList();
 	}
 	
 	public static void updateKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
@@ -60,7 +52,6 @@ public final class DatabaseAccess {
 	}
 	
 	public static void addKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
-		System.out.println("Adding new profile");
 		entityManager.getTransaction().begin();	
 		for(int i=0; i<10; i++) {
 			for(int j=0; j<10; j++) {
@@ -70,30 +61,16 @@ public final class DatabaseAccess {
 		entityManager.getTransaction().commit();
 	}
 	
-	public static User getUser(int userId) {
-		User user = null;
-		
-		user = entityManager.find(User.class, userId);
-		
-		if(user == null) {
-			System.out.println("No user with id: " + Integer.toString(userId));
-		} else {
-			System.out.println("Found user " + user.getAlias() + " and id " + Integer.toString(userId));
-		}
-		return user;
+	public static User getUserFromId(int userId) {
+		return entityManager.find(User.class, userId);
 	}
 	
-	public static Profile getProfile(int profileId) {
-		Profile profile = null;
-		
-		profile = entityManager.find(Profile.class, profileId);
-		
-		if(profile == null) {
-			System.out.println("No user with id: " + Integer.toString(profileId));
-		} else {
-			System.out.println("Found user " + profile.getProfilename() + " and id " + Integer.toString(profileId));
-		}
-		return profile;
+	public static User getUserFromAlias(String alias) {
+		return (User) entityManager.createQuery("FROM User u WHERE u.alias = '" + alias + "'").getSingleResult();
+	}
+	
+	public static Profile getProfileFromId(int profileId) {	
+		return entityManager.find(Profile.class, profileId);
 	}
 	
 }

@@ -1,10 +1,11 @@
-package simonhanna.ense480.entities;
+package simonhanna.ense480.models;
 
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -14,10 +15,10 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int userid;
 	
-	@Column(length=35, unique=false)
+	@Column(length=35, unique=true)
 	private String alias;
 	
 	@OneToMany(mappedBy="user")
@@ -54,4 +55,17 @@ public class User {
 	public int getUserid() {
 		return userid;
 	}	
+	
+	public Profile getProfileByName(String name) {
+		for(int i=0; i<this.profiles.size(); i++) {
+			if(this.profiles.get(i).getProfilename().equals(name))
+				return this.profiles.get(i);
+		}
+		return null;
+	}
+	
+	public String toString() {
+		return Integer.toString(this.getUserid()) + ": " + this.getAlias();
+	}
+	
 }

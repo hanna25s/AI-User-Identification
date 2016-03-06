@@ -1,4 +1,4 @@
-package simonhanna.ense480.activities;
+package simonhanna.ense480.services;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,10 +16,10 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.util.simple.EncogUtility;
 
-import simonhanna.ense480.entities.KeyMetric;
-import simonhanna.ense480.entities.Profile;
+import simonhanna.ense480.models.KeyMetric;
+import simonhanna.ense480.models.Profile;
 
-public final class NeuralNetwork {
+public final class NeuralNetworkService {
 	
 	public static double[] VALID_USER =  {1.0};
 	public static double[] INVALID_USER = {-1.0};
