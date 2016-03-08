@@ -41,6 +41,13 @@ public class KeyMetric {
 		this.numberOfOccurences = 0;
 	}
 	
+	public KeyMetric(int from, int to) {
+		this.startKey = from;
+		this.endKey = to;
+		this.numberOfOccurences = 0;
+		this.profile = null;
+	}
+	
 	public void setFrom(int from) {
 		this.startKey = from;
 	}
@@ -81,7 +88,11 @@ public class KeyMetric {
 	
 	public void writeContents() {
 		System.out.println("Writing KeyMetric contents...");
-		System.out.println("Profile Id: " + this.getProfileid());
+		if(this.profile == null) {
+			System.out.println("Profile unknown");
+		} else {
+			System.out.println("Profile Id: " + this.getProfileid());
+		}
 		System.out.println("From: " + this.startKey);
 		System.out.println("To: " + this.endKey);
 		System.out.println("Number of Occurences: " + this.numberOfOccurences);

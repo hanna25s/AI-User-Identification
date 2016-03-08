@@ -65,7 +65,7 @@ public class User {
 	}
 	
 	public String toString() {
-		return Integer.toString(this.getUserid()) + ": " + this.getAlias();
+		return this.getAlias();
 	}
 	
 }

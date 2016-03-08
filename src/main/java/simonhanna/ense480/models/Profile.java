@@ -74,12 +74,16 @@ public class Profile {
 	}
 	
 	public void updateKeyMetrics(KeyMetric[][] profileMetrics) {
-		//TODO add a for each to update entries as needed
-		System.out.println("Would be updating metrics");
+		this.keyMetrics.forEach(km -> {
+			km.setNumberOfOccurences(km.getNumberOfOccurences() + profileMetrics[km.getFrom()][km.getTo()].getNumberOfOccurences());
+			km.setTime(km.getTime() + profileMetrics[km.getFrom()][km.getTo()].getTime());
+		});
 	}
 	
 	public void displayKeyMetrics() {
 		
 	}
-	
+	public String toString() {
+		return this.getProfilename();
+	}
 }
