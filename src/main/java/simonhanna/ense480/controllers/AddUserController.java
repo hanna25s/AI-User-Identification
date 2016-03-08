@@ -11,7 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import simonhanna.ense480.services.DatabaseService;
 
 public class AddUserController implements Initializable{
 
@@ -21,6 +23,8 @@ public class AddUserController implements Initializable{
 	private Button backButton;
 	@FXML
 	private Button addUserButton;
+	@FXML
+	private Text addUserError;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {}
@@ -41,6 +45,15 @@ public class AddUserController implements Initializable{
 	@FXML
 	public void addUser(ActionEvent event) {
 		try {
+			String userAlias = newUserInput.getText();
+			if(userAlias == null || userAlias.equalsIgnoreCase("")) {
+				System.out.println("User was null");
+				addUserError.setText("You must enter a username");
+				return;
+			}
+			
+			DatabaseService.addUser(userAlias);
+			
 			Stage stage = (Stage) addUserButton.getScene().getWindow();
 			Parent root = FXMLLoader.load(getClass().getResource("/view/LandingView.fxml"));
 			Scene scene = new Scene(root);
