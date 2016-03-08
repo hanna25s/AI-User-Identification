@@ -10,30 +10,48 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65" fx:controller="simonhanna.ense480.controllers.ProfileController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="simonhanna.ense480.controllers.ProfileController">
   <tabs>
-    <Tab text="Alter Profile">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <TextArea layoutX="68.0" layoutY="95.0" prefHeight="200.0" prefWidth="475.0" />
-                  <Label layoutX="68.0" layoutY="72.0" text="Type below to add key metrics to your profile" />
-                  <Label layoutX="68.0" layoutY="34.0" text="Select a Profile:" />
-                  <ComboBox layoutX="172.0" layoutY="29.0" prefWidth="150.0" />
-                  <Button layoutX="439.0" layoutY="302.0" mnemonicParsing="false" text="Save Changes" />
-               </children></AnchorPane>
-      </content>
-    </Tab>
     <Tab text="Create Profile">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="367.0" prefWidth="564.0">
                <children>
-                  <Text layoutX="74.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter a meaningful name for your profile based on your current state. For example: Normal, Sleep, Angry" wrappingWidth="451.07012939453125" />
-                  <Label layoutX="140.0" layoutY="159.0" text="Current Status" />
-                  <TextField layoutX="243.0" layoutY="154.0" />
-                  <Button layoutX="322.0" layoutY="187.0" mnemonicParsing="false" text="Add Profile" />
+                  <Text layoutX="74.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter a meaningful name for your profile based on your current state. For example: Normal, Tired, Angry" wrappingWidth="451.07012939453125" />
+                  <Label fx:id="profileNameLabel" layoutX="140.0" layoutY="159.0" text="Profile Name" />
+                  <TextField fx:id="profileName" layoutX="243.0" layoutY="154.0" />
+                  <Button fx:id="addProfileButton" layoutX="322.0" layoutY="187.0" mnemonicParsing="false" onAction="#addProfile" text="Add Profile" />
+                  <Text fx:id="addProfileError" fill="#ff3030" layoutX="233.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                </children></AnchorPane>
       </content>
     </Tab>
+    <Tab text="Alter Profile">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextArea fx:id="metricInput" layoutX="68.0" layoutY="95.0" onKeyPressed="#addProfileKeyMetric" prefHeight="200.0" prefWidth="475.0" />
+                  <Label layoutX="68.0" layoutY="72.0" text="Type below to add key metrics to your profile" />
+                  <Label layoutX="68.0" layoutY="34.0" text="Select a Profile:" />
+                  <ComboBox fx:id="profileComboBox" layoutX="172.0" layoutY="29.0" prefWidth="150.0" />
+                  <Button fx:id="saveMetricsButton" layoutX="439.0" layoutY="302.0" mnemonicParsing="false" onAction="#saveMetrics" text="Save Changes" />
+                  <Text fx:id="saveMetricsError" fill="#ff2f2f" layoutX="343.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Change User">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
+      <Tab text="Detect User">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextArea layoutX="71.0" layoutY="78.0" onKeyTyped="#addDetectUserKeyMetric" prefHeight="193.0" prefWidth="475.0" wrapText="true" />
+                  <Text layoutX="71.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type below for the system to guess your identity" />
+                  <TextField fx:id="identifyUserText" editable="false" layoutX="109.0" layoutY="280.0" prefHeight="26.0" prefWidth="169.0" />
+                  <Label layoutX="71.0" layoutY="285.0" text="User:" />
+               </children></AnchorPane>
+        </content>
+      </Tab>
   </tabs>
 </TabPane>
