@@ -3,7 +3,6 @@ package simonhanna.ense480.services;
 import java.io.IOException;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,7 +21,7 @@ public class Launcher extends Application {
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("AI User Identification");
-		    primaryStage.setOnCloseRequest(e -> Platform.exit());
+		    primaryStage.setOnCloseRequest(e -> System.exit(0));
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
