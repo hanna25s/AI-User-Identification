@@ -30,6 +30,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initKeyMetrics(detectUserKeyMetrics);
+		initKeyMetrics(alterProfileKeyMetrics);
 		currentProfile = null;
 	}
 	
@@ -45,17 +46,22 @@ public class ProfileController extends KeyMetricController implements Initializa
 	}
 
 	@FXML
-	public void selectUser() {
+	public void saveMetrics() {	
 		currentProfile = profileComboBox.getValue();
-	}
-	
-	@FXML
-	public void saveMetrics() {
+		
 		if(currentProfile == null) {
 			saveMetricsError.setText("You must select a profile");
 			return;
 		}
-		DatabaseService.addKeyMetrics(currentProfile, alterProfileKeyMetrics);
+		
+		for(int i=0; i<10; i++) {
+			for(int j=0 ;j<10; j++) {
+				alterProfileKeyMetrics[i][j].setProfile(currentProfile);
+			}
+		}
+		
+		DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
+		initKeyMetrics(alterProfileKeyMetrics);
 	}
 	
 	@FXML
@@ -78,12 +84,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 	
 	@FXML
 	public void addProfileKeyMetric(KeyEvent k) {
-		if(currentProfile == null) {
-			saveMetricsError.setText("You must select a profile first");
-			return;
-		}
-		saveMetricsError.setText("");
-		addKeyMetric(k,alterProfileKeyMetrics);
+		addKeyMetric(k, alterProfileKeyMetrics);
 	}
 	
 	@FXML

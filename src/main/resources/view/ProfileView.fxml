@@ -28,7 +28,7 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TextArea fx:id="metricInput" layoutX="68.0" layoutY="95.0" onKeyPressed="#addProfileKeyMetric" prefHeight="200.0" prefWidth="475.0" />
+                  <TextArea fx:id="metricInput" layoutX="68.0" layoutY="95.0" onKeyTyped="#addProfileKeyMetric" prefHeight="200.0" prefWidth="475.0" />
                   <Label layoutX="68.0" layoutY="72.0" text="Type below to add key metrics to your profile" />
                   <Label layoutX="68.0" layoutY="34.0" text="Select a Profile:" />
                   <ComboBox fx:id="profileComboBox" layoutX="172.0" layoutY="29.0" prefWidth="150.0" />
