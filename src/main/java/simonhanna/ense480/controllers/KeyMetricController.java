@@ -17,7 +17,6 @@ public abstract class KeyMetricController {
 		System.out.println("Adding key metric");
 		endTime = (double)System.nanoTime()/1000000000.0;
     	newKey = getKeyGroup(k);
-    	System.out.println(newKey);
     	timeBetweenKeys = (endTime - startTime);
     	
     	//In case the user leaves and comes back. Avoid incredibly large values as they lead to errors.
