@@ -13,6 +13,6 @@ hs_err_pid*
 
 # ignore Maven
 target/
-.classpatch
+.classpath
 .project
 .settings/
