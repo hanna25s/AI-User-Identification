@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
@@ -18,11 +19,21 @@ public class ProfileController extends KeyMetricController implements Initializa
 	@FXML
 	ComboBox<Profile> profileComboBox;
 	@FXML
+	ComboBox<User> userComboBox;
+	@FXML
 	TextField profileName;
 	@FXML
 	Text addProfileError;
 	@FXML
 	Text saveMetricsError;
+	@FXML
+	TextField newUserInput;
+	@FXML
+	Text changeUserError;
+	@FXML
+	TextField currentUserText;
+	@FXML
+	TextArea alterProfileMetricInput;
 	
 	private User currentUser;
 	private Profile currentProfile;
@@ -31,12 +42,16 @@ public class ProfileController extends KeyMetricController implements Initializa
 	public void initialize(URL location, ResourceBundle resources) {
 		initKeyMetrics(detectUserKeyMetrics);
 		initKeyMetrics(alterProfileKeyMetrics);
+		DatabaseService.getUserAliases().forEach(user -> {
+			userComboBox.getItems().add(user);
+		});
 		currentProfile = null;
 	}
 	
 	public void initializeController(User user) {
 		System.out.println("Initializing controller");
 		this.currentUser = user;
+		currentUserText.setText(currentUser.getAlias());
 		
 		if(!currentUser.getProfiles().isEmpty()) {
 			currentUser.getProfiles().forEach(profile -> {
@@ -45,6 +60,36 @@ public class ProfileController extends KeyMetricController implements Initializa
 		}
 	}
 
+	@FXML
+	public void changeUser() {
+		if(userComboBox.getValue() == null) {
+			changeUserError.setText("You must select a user first");
+			return;
+		} else {
+			currentUser = userComboBox.getValue();
+			currentUserText.setText(currentUser.getAlias());
+			
+			profileComboBox.getItems().clear();
+			currentUser.getProfiles().forEach(prof -> {
+				profileComboBox.getItems().add(prof);
+			});
+		}
+	}
+	
+	@FXML
+	public void addUser() {
+		if(newUserInput.getText() == null || newUserInput.getText().equals("")) {
+			changeUserError.setText("You must enter a username");
+			return;
+		}
+		DatabaseService.addUser(newUserInput.getText());
+		
+		userComboBox.getItems().clear();
+		DatabaseService.getUserAliases().forEach(user -> {
+			userComboBox.getItems().add(user);
+		});
+	}
+	
 	@FXML
 	public void saveMetrics() {	
 		currentProfile = profileComboBox.getValue();
@@ -62,6 +107,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 		
 		DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
 		initKeyMetrics(alterProfileKeyMetrics);
+		alterProfileMetricInput.setText("");
 	}
 	
 	@FXML
