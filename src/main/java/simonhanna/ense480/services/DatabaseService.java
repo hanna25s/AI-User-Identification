@@ -52,6 +52,7 @@ public final class DatabaseService {
 		});
 		
 		entityManager.getTransaction().commit();
+		entityManager.refresh(profile);
 	}
 	
 	public static void addKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
@@ -62,6 +63,7 @@ public final class DatabaseService {
 			}
 		}
 		entityManager.getTransaction().commit();
+		entityManager.refresh(profile);
 	}
 	
 	public static User getUserFromId(int userId) {
