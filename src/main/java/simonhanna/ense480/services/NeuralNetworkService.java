@@ -22,18 +22,45 @@ import simonhanna.ense480.models.Profile;
 public final class NeuralNetworkService {
 	
 	public static double[] VALID_USER =  {1.0};
-	public static double[] INVALID_USER = {-1.0};
+	public static double[] INVALID_USER = {0.0};
 	
 	public static double identifyUser(List<KeyMetric> keyMetrics) {
 		return 0.0;
 	}
 	
+	public static void trainNeuralNetwork(Profile profile) {
+		List<Profile> negativeReinfocementProfiles = DatabaseService.getOtherProfiles(profile);
+		List<MLDataPair> data = new ArrayList<MLDataPair>();
+		
+		data.add(getDataPair(profile.getKeyMetrics(), VALID_USER));
+		
+		BasicNetwork network = EncogUtility.simpleFeedForward(100, 12, 0, 1, false);
+        network.reset();
+		
+		negativeReinfocementProfiles.forEach(tempProfile -> {
+			List<KeyMetric> tempKeyMetrics = tempProfile.getKeyMetrics();
+			if(tempKeyMetrics != null && tempKeyMetrics.size() != 0)
+				data.add(getDataPair(tempKeyMetrics, INVALID_USER));
+		});
+		
+		MLDataSet trainingSet = new BasicMLDataSet(data);    
+        final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.6);
+        train.setBatchSize(1);
+        EncogUtility.trainToError(train, 0.005);
+        
+        try {
+            ObjectOutputStream objectOutput = new ObjectOutputStream(
+            		new FileOutputStream("neuralNetworks/" + Integer.toString(profile.getProfileid()) + ".nn"));
+
+            objectOutput.writeObject(network);
+            objectOutput.close();
+
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        }
+	}
+	
 	public static void createNeuralNetwork(List<KeyMetric> keyMetrics, Profile profile) {
-		
-		double[] input = getInputArray(keyMetrics);
-		
-		for(int i=0; i<100; i++)
-			System.out.println(Integer.toString(i) + " " + Double.toString(input[i]));
 		
 		//Create Network
 		BasicNetwork network = EncogUtility.simpleFeedForward(100, 12, 0, 1, false);
@@ -91,11 +118,11 @@ public final class NeuralNetworkService {
 		
 	}
 	
-	public static MLDataSet getTrainingSet(List<KeyMetric> keyMetrics, double[] output) {
+	private static MLDataSet getTrainingSet(List<KeyMetric> keyMetrics, double[] output) {
 		
 		double[] input = getInputArray(keyMetrics);
 		
-		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(input), new BasicMLData(VALID_USER));
+		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(input), new BasicMLData(output));
 		List<MLDataPair> data = new ArrayList<MLDataPair>();
 		data.add(dataPair);
 		
@@ -105,7 +132,15 @@ public final class NeuralNetworkService {
 		
 	}
 	
-	public static double[] getInputArray(List<KeyMetric> keyMetrics) {
+	private static MLDataPair getDataPair(List<KeyMetric> inputs, double[] expectedOutput) {
+		double[] inputArray = getInputArray(inputs);
+		
+		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(inputArray), new BasicMLData(expectedOutput));
+		
+		return dataPair;
+	}
+	
+	private static double[] getInputArray(List<KeyMetric> keyMetrics) {
 		double[] input = new double[100];
 		
 		keyMetrics.forEach(km -> {

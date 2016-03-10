@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import simonhanna.ense480.models.Profile;
 import simonhanna.ense480.models.User;
 import simonhanna.ense480.services.DatabaseService;
+import simonhanna.ense480.services.NeuralNetworkService;
 
 public class ProfileController extends KeyMetricController implements Initializable{
 
@@ -108,6 +109,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 		DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
 		initKeyMetrics(alterProfileKeyMetrics);
 		alterProfileMetricInput.setText("");
+		NeuralNetworkService.trainNeuralNetwork(currentProfile);
 	}
 	
 	@FXML

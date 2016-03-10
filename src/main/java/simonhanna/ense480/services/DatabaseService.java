@@ -68,12 +68,11 @@ public final class DatabaseService {
 		return entityManager.find(User.class, userId);
 	}
 	
-	public static User getUserFromAlias(String alias) {
-		return (User) entityManager.createQuery("FROM User u WHERE u.alias = '" + alias + "'").getSingleResult();
-	}
-	
 	public static Profile getProfileFromId(int profileId) {	
 		return entityManager.find(Profile.class, profileId);
 	}
 	
+	public static List<Profile> getOtherProfiles(Profile profile) {
+		return entityManager.createQuery("Select p FROM Profile p WHERE p.profileid != '" + profile.getProfileid() + "'").getResultList();
+	}
 }
