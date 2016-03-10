@@ -75,8 +75,8 @@ public class ProfileController extends KeyMetricController implements Initializa
 		
 		addProfileError.setText("");
 		DatabaseService.addProfile(profileName.getText(), currentUser);
+		profileComboBox.getItems().clear();
 		
-		profileComboBox = new ComboBox<Profile>();
 		currentUser.getProfiles().forEach(profile -> {
 			profileComboBox.getItems().add(profile);
 		});

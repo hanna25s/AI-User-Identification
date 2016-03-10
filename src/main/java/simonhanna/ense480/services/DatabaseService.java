@@ -29,6 +29,7 @@ public final class DatabaseService {
 		
 		entityManager.persist(profile);
 		entityManager.getTransaction().commit();
+		entityManager.refresh(user);
 	}
 	
 	public static List<User> getUserAliases() {
@@ -38,16 +39,18 @@ public final class DatabaseService {
 	public static void updateKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
 		
 		if(profile.getKeyMetrics() == null || profile.getKeyMetrics().size() == 0) {
+			System.out.println("No metrics existing, creating metrics");
 			addKeyMetrics(profile, keyMetric);
 			return;
 		}
-
 		entityManager.getTransaction().begin();
+		
 		profile.getKeyMetrics().forEach((km) -> {
 			km.setNumberOfOccurences(km.getNumberOfOccurences() + keyMetric[km.getFrom()][km.getTo()].getNumberOfOccurences());
 			km.setTime(km.getTime() + keyMetric[km.getFrom()][km.getTo()].getTime());
 			entityManager.persist(km);
 		});
+		
 		entityManager.getTransaction().commit();
 	}
 	

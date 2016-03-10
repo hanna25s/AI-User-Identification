@@ -3,6 +3,7 @@ package simonhanna.ense480.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ public class Profile {
 	@JoinColumn(name="userid")
 	private User user;
 	
-	@OneToMany(mappedBy="profile")
+	@OneToMany(mappedBy="profile", cascade = CascadeType.ALL)
 	private List<KeyMetric> keyMetrics = new ArrayList<KeyMetric>();
 	
 	public void setProfilename(String profilename) {

@@ -2,6 +2,7 @@ package simonhanna.ense480.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,10 +22,10 @@ public class User {
 	@Column(length=35, unique=true)
 	private String alias;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<Mistake> mistakes; 
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<Profile> profiles; 
 	
 	public User() {}
