@@ -1,7 +1,10 @@
 package simonhanna.ense480.services;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -24,8 +27,48 @@ public final class NeuralNetworkService {
 	public static double[] VALID_USER =  {1.0};
 	public static double[] INVALID_USER = {0.0};
 	
-	public static double identifyUser(List<KeyMetric> keyMetrics) {
-		return 0.0;
+	public static Profile identifyUser(List<KeyMetric> keyMetrics) {
+		
+		BasicNetwork network = null;
+		String profileId = null;
+		ObjectInputStream ois = null;
+		double highestValue = 0;
+		double tempValue = 0;
+		
+		File[] neuralNetworks = new File("neuralNetworks/").listFiles(new FilenameFilter() { 
+	         	public boolean accept(File dir, String filename)
+             		{ return filename.endsWith(".nn"); }
+	         });
+		
+		for(int i=0; i<neuralNetworks.length; i++) {
+			try {
+				ois = new ObjectInputStream(new FileInputStream("neuralNetworks/" + neuralNetworks[i].getName()));
+				network = (BasicNetwork) ois.readObject();
+				tempValue = evaluateNeuralNetwork(network, keyMetrics);
+				if(tempValue > highestValue) {
+					highestValue = tempValue;
+					profileId = neuralNetworks[i].getName();
+					System.out.println("New closest: " + profileId);
+					System.out.println(tempValue);
+				}
+			} catch (Exception e) {
+				System.out.println("Error reading neural network: " + neuralNetworks[i].getName());
+				e.printStackTrace();
+			} 
+		}
+		
+		try {
+			ois.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(profileId == null)
+			return null;
+		
+		profileId = profileId.substring(0, profileId.indexOf('.'));
+		return DatabaseService.getProfileFromId(Integer.parseInt(profileId));
+
 	}
 	
 	public static void trainNeuralNetwork(Profile profile) {
@@ -58,6 +101,13 @@ public final class NeuralNetworkService {
         } catch (Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public static void trainAllNeuralNetworks() {
+		DatabaseService.getProfiles().forEach(profile -> {
+			System.out.println("Training: " + profile.getProfilename());
+			trainNeuralNetwork(profile);
+		});
 	}
 	
 	public static void createNeuralNetwork(List<KeyMetric> keyMetrics, Profile profile) {
@@ -113,7 +163,6 @@ public final class NeuralNetworkService {
 		}
 		
 		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(getInputArray(keyMetrics)));
-		System.out.println(Double.toString(dataPair.getInput().size()));
 		return network.compute(dataPair.getInput()).getData(0);
 		
 	}

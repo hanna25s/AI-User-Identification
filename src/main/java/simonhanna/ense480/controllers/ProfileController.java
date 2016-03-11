@@ -109,7 +109,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 		DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
 		initKeyMetrics(alterProfileKeyMetrics);
 		alterProfileMetricInput.setText("");
-		NeuralNetworkService.trainNeuralNetwork(currentProfile);
+		NeuralNetworkService.trainAllNeuralNetworks();
 	}
 	
 	@FXML

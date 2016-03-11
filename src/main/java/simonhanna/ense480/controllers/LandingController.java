@@ -2,6 +2,8 @@ package simonhanna.ense480.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -11,11 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import simonhanna.ense480.models.KeyMetric;
+import simonhanna.ense480.models.Profile;
 import simonhanna.ense480.models.User;
 import simonhanna.ense480.services.DatabaseService;
+import simonhanna.ense480.services.NeuralNetworkService;
 
 public class LandingController extends KeyMetricController implements Initializable {
 	
@@ -31,6 +37,8 @@ public class LandingController extends KeyMetricController implements Initializa
 	private Text errorText;
 	@FXML
 	private Text addMetricError;
+	@FXML
+	private TextField identifyUserText;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -54,6 +62,19 @@ public class LandingController extends KeyMetricController implements Initializa
 			e.printStackTrace();
 			return;
 		}
+	}
+	
+	@FXML
+	public void detectUser() {
+		List<KeyMetric> metricList = new ArrayList<KeyMetric>();
+		
+		for(int i=0; i<10; i++) {
+			for(int j=0; j<10; j++) {
+				metricList.add(detectUserKeyMetrics[i][j]);
+			}
+		}
+		Profile detectedUser = NeuralNetworkService.identifyUser(metricList);
+		identifyUserText.setText(detectedUser.getUser().getAlias() + " - " + detectedUser.getProfilename());
 	}
 	
 	@FXML

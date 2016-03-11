@@ -14,7 +14,6 @@ public abstract class KeyMetricController {
 	protected double startTime, endTime, timeBetweenKeys;
 	
 	public void addKeyMetric(KeyEvent k, KeyMetric[][] keyMetrics) {
-		System.out.println("Adding key metric");
 		endTime = (double)System.nanoTime()/1000000000.0;
     	newKey = getKeyGroup(k);
     	timeBetweenKeys = (endTime - startTime);

@@ -70,6 +70,10 @@ public final class DatabaseService {
 		return entityManager.find(User.class, userId);
 	}
 	
+	public static List<Profile> getProfiles() {
+		return entityManager.createQuery("SELECT p FROM Profile p").getResultList();
+	}
+	
 	public static Profile getProfileFromId(int profileId) {	
 		return entityManager.find(Profile.class, profileId);
 	}

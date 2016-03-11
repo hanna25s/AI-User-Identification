@@ -32,6 +32,7 @@
                   <Label layoutX="47.0" layoutY="206.0" text="User:" />
                   <Text layoutX="21.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type below for the system to guess your identity" />
                   <TextField fx:id="identifyUserText" editable="false" layoutX="83.0" layoutY="201.0" prefHeight="26.0" prefWidth="169.0" />
+                  <Button layoutX="291.0" layoutY="201.0" mnemonicParsing="false" onAction="#detectUser" text="Detect User" />
                </children>
             </AnchorPane>
          </content>
