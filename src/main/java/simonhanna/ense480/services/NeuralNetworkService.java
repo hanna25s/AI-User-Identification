@@ -75,8 +75,6 @@ public final class NeuralNetworkService {
 		List<Profile> negativeReinfocementProfiles = DatabaseService.getOtherProfiles(profile);
 		List<MLDataPair> data = new ArrayList<MLDataPair>();
 		
-		data.add(getDataPair(profile.getKeyMetrics(), VALID_USER));
-		
 		BasicNetwork network = EncogUtility.simpleFeedForward(100, 12, 0, 1, false);
         network.reset();
 		
@@ -86,10 +84,12 @@ public final class NeuralNetworkService {
 				data.add(getDataPair(tempKeyMetrics, INVALID_USER));
 		});
 		
+		data.add(getDataPair(profile.getKeyMetrics(), VALID_USER));
+		
 		MLDataSet trainingSet = new BasicMLDataSet(data);    
         final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.6);
         train.setBatchSize(1);
-        EncogUtility.trainToError(train, 0.005);
+        EncogUtility.trainToError(train, 0.001);
         
         try {
             ObjectOutputStream objectOutput = new ObjectOutputStream(
@@ -108,35 +108,6 @@ public final class NeuralNetworkService {
 			System.out.println("Training: " + profile.getProfilename());
 			trainNeuralNetwork(profile);
 		});
-	}
-	
-	public static void createNeuralNetwork(List<KeyMetric> keyMetrics, Profile profile) {
-		
-		//Create Network
-		BasicNetwork network = EncogUtility.simpleFeedForward(100, 12, 0, 1, false);
-        network.reset();
-		
-        MLDataSet trainingSet = getTrainingSet(keyMetrics, VALID_USER);
-		
-		// Train the neural network.
-        final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.02);
-        train.setBatchSize(1);
-		
-        // Evaluate the neural network.
-        EncogUtility.trainToError(train, 0.01);
-        EncogUtility.evaluate(network, trainingSet);
-        
-        
-        try {
-            ObjectOutputStream objectOutput = new ObjectOutputStream(
-            		new FileOutputStream("neuralNetworks/" + Integer.toString(profile.getProfileid()) + ".nn"));
-
-            objectOutput.writeObject(network);
-            objectOutput.close();
-
-        } catch (Exception ex) {
-        	ex.printStackTrace();
-        }
 	}
 	
 	public static BasicNetwork readNeuralNetworkFromFile(int profileId) {
@@ -164,20 +135,6 @@ public final class NeuralNetworkService {
 		
 		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(getInputArray(keyMetrics)));
 		return network.compute(dataPair.getInput()).getData(0);
-		
-	}
-	
-	private static MLDataSet getTrainingSet(List<KeyMetric> keyMetrics, double[] output) {
-		
-		double[] input = getInputArray(keyMetrics);
-		
-		MLDataPair dataPair = new BasicMLDataPair(new BasicMLData(input), new BasicMLData(output));
-		List<MLDataPair> data = new ArrayList<MLDataPair>();
-		data.add(dataPair);
-		
-		MLDataSet trainingSet = new BasicMLDataSet(data);
-		
-		return trainingSet;
 		
 	}
 	

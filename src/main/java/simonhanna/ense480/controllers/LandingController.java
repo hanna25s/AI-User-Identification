@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
@@ -39,6 +40,8 @@ public class LandingController extends KeyMetricController implements Initializa
 	private Text addMetricError;
 	@FXML
 	private TextField identifyUserText;
+	@FXML
+	private TextArea detectUserInput;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -106,6 +109,12 @@ public class LandingController extends KeyMetricController implements Initializa
 	@FXML
 	public void addDetectUserKeyMetric(KeyEvent k) {
 		addKeyMetric(k, detectUserKeyMetrics);
+	}
+	
+	@FXML
+	public void resetMetrics() {
+		initKeyMetrics(detectUserKeyMetrics);
+		detectUserInput.setText("");
 	}
 	
 	public void writeContents() {

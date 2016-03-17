@@ -1,6 +1,8 @@
 package simonhanna.ense480.controllers;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import simonhanna.ense480.models.KeyMetric;
 import simonhanna.ense480.models.Profile;
 import simonhanna.ense480.models.User;
 import simonhanna.ense480.services.DatabaseService;
@@ -33,6 +36,8 @@ public class ProfileController extends KeyMetricController implements Initializa
 	Text changeUserError;
 	@FXML
 	TextField currentUserText;
+	@FXML
+	TextField identifyUserText;
 	@FXML
 	TextArea alterProfileMetricInput;
 	
@@ -131,6 +136,19 @@ public class ProfileController extends KeyMetricController implements Initializa
 	}
 	
 	@FXML
+	public void detectUser() {
+		List<KeyMetric> metricList = new ArrayList<KeyMetric>();
+		
+		for(int i=0; i<10; i++) {
+			for(int j=0; j<10; j++) {
+				metricList.add(detectUserKeyMetrics[i][j]);
+			}
+		}
+		Profile detectedUser = NeuralNetworkService.identifyUser(metricList);
+		identifyUserText.setText(detectedUser.getUser().getAlias() + " - " + detectedUser.getProfilename());
+	}
+	
+	@FXML
 	public void addProfileKeyMetric(KeyEvent k) {
 		addKeyMetric(k, alterProfileKeyMetrics);
 	}
@@ -138,5 +156,11 @@ public class ProfileController extends KeyMetricController implements Initializa
 	@FXML
 	public void addDetectUserKeyMetric(KeyEvent k) {
 		addKeyMetric(k, detectUserKeyMetrics);
+	}
+	
+	@FXML
+	public void resetMetrics() {
+		System.out.println("Resetting metrics");
+		initKeyMetrics(detectUserKeyMetrics);
 	}
 }

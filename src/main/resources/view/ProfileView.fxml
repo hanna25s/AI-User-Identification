@@ -61,6 +61,8 @@
                   <Text layoutX="71.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type below for the system to guess your identity" />
                   <TextField fx:id="identifyUserText" editable="false" layoutX="109.0" layoutY="280.0" prefHeight="26.0" prefWidth="169.0" />
                   <Label layoutX="71.0" layoutY="285.0" text="User:" />
+                  <Button layoutX="457.0" layoutY="280.0" mnemonicParsing="false" onAction="#detectUser" text="Detect User" />
+                  <Button layoutX="397.0" layoutY="280.0" mnemonicParsing="false" onAction="#resetMetrics" text="Reset" />
                </children></AnchorPane>
         </content>
       </Tab>

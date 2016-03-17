@@ -28,11 +28,12 @@
          <content>
             <AnchorPane prefHeight="296.0" prefWidth="530.0">
                <children>
-                  <TextArea layoutX="12.0" layoutY="42.0" onKeyTyped="#addDetectUserKeyMetric" prefHeight="150.0" prefWidth="388.0" wrapText="true" />
-                  <Label layoutX="47.0" layoutY="206.0" text="User:" />
+                  <TextArea fx:id="detectUserInput" layoutX="12.0" layoutY="42.0" onKeyTyped="#addDetectUserKeyMetric" prefHeight="150.0" prefWidth="388.0" wrapText="true" />
+                  <Label layoutX="14.0" layoutY="206.0" text="User:" />
                   <Text layoutX="21.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type below for the system to guess your identity" />
-                  <TextField fx:id="identifyUserText" editable="false" layoutX="83.0" layoutY="201.0" prefHeight="26.0" prefWidth="169.0" />
-                  <Button layoutX="291.0" layoutY="201.0" mnemonicParsing="false" onAction="#detectUser" text="Detect User" />
+                  <TextField fx:id="identifyUserText" editable="false" layoutX="53.0" layoutY="201.0" prefHeight="26.0" prefWidth="169.0" />
+                  <Button layoutX="308.0" layoutY="201.0" mnemonicParsing="false" onAction="#detectUser" text="Detect User" />
+                  <Button layoutX="247.0" layoutY="201.0" mnemonicParsing="false" onAction="#resetMetrics" text="Reset" />
                </children>
             </AnchorPane>
          </content>
