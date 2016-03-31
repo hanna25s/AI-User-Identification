@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -40,6 +41,8 @@ public class ProfileController extends KeyMetricController implements Initializa
 	TextField identifyUserText;
 	@FXML
 	TextArea alterProfileMetricInput;
+	@FXML
+	TextField profileInputStatus;
 	
 	private User currentUser;
 	private Profile currentProfile;
@@ -111,10 +114,22 @@ public class ProfileController extends KeyMetricController implements Initializa
 			}
 		}
 		
-		DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
-		initKeyMetrics(alterProfileKeyMetrics);
+		profileInputStatus.setText("Training");
 		alterProfileMetricInput.setText("");
-		NeuralNetworkService.trainAllNeuralNetworks();
+		
+		new Thread() {
+            public void run() {
+            	DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
+        		initKeyMetrics(alterProfileKeyMetrics);
+            	NeuralNetworkService.trainAllNeuralNetworks();
+            	Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						profileInputStatus.setText("Ready");
+					}	
+            	});
+            }
+        }.start();
 	}
 	
 	@FXML
