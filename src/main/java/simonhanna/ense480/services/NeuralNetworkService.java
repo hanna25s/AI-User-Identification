@@ -89,7 +89,7 @@ public final class NeuralNetworkService {
 		MLDataSet trainingSet = new BasicMLDataSet(data);    
         final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.6);
         train.setBatchSize(1);
-        EncogUtility.trainToError(train, 0.001);
+        EncogUtility.trainToError(train, 0.01);
         
         try {
             ObjectOutputStream objectOutput = new ObjectOutputStream(
