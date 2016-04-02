@@ -62,7 +62,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 		this.currentUser = user;
 		currentUserText.setText(currentUser.getAlias());
 		
-		if(!currentUser.getProfiles().isEmpty()) {
+		if(currentUser.getProfiles() != null && !currentUser.getProfiles().isEmpty()) {
 			currentUser.getProfiles().forEach(profile -> {
 				profileComboBox.getItems().add(profile);
 			}); 
