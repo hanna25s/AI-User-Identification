@@ -36,6 +36,13 @@ public final class DatabaseService {
 		return entityManager.createQuery("SELECT u FROM User u").getResultList();
 	}
 	
+	/**
+	 * Updates an existing set of key metrics with the new set of key metrics
+	 * that are passed in
+	 * 
+	 * @param profile    Profile the key metrics belong to
+	 * @param keyMetric  Key metrics we want to add the the existing metrics
+	 */
 	public static void updateKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
 		
 		if(profile.getKeyMetrics() == null || profile.getKeyMetrics().size() == 0) {
@@ -55,6 +62,13 @@ public final class DatabaseService {
 		entityManager.refresh(profile);
 	}
 	
+	/**
+	 * When no previous key metrics exist for a profile, this method is used to initiate the set of metrics
+	 * for a profile
+	 * 
+	 * @param profile    Profile the key metrics belong to
+	 * @param keyMetric  Key metrics we want to add the the existing metrics
+	 */
 	public static void addKeyMetrics(Profile profile, KeyMetric[][] keyMetric) {
 		entityManager.getTransaction().begin();	
 		for(int i=0; i<10; i++) {

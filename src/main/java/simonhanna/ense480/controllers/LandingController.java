@@ -52,6 +52,9 @@ public class LandingController extends KeyMetricController implements Initializa
 		});
 	}
 	
+	/**
+	 * Changes to the add user view
+	 */
 	@FXML
 	public void addUser() {
 		try {
@@ -67,6 +70,9 @@ public class LandingController extends KeyMetricController implements Initializa
 		}
 	}
 	
+	/**
+	 * Converts the metric array to a list, then calls the NeuralNetwork service to identify the user
+	 */
 	@FXML
 	public void detectUser() {
 		List<KeyMetric> metricList = new ArrayList<KeyMetric>();
@@ -80,6 +86,9 @@ public class LandingController extends KeyMetricController implements Initializa
 		identifyUserText.setText(detectedUser.getUser().getAlias() + " - " + detectedUser.getProfilename());
 	}
 	
+	/**
+	 * Initializes the profile controller and changes to the profile view
+	 */
 	@FXML
 	public void selectUser() {
 		try {
@@ -106,6 +115,11 @@ public class LandingController extends KeyMetricController implements Initializa
 		}
 	}
 	
+	/**
+	 * Used to add metrics for detecting the user
+	 * 
+	 * @param k  Used to determine what key was hit
+	 */
 	@FXML
 	public void addDetectUserKeyMetric(KeyEvent k) {
 		addKeyMetric(k, detectUserKeyMetrics);

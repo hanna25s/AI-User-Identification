@@ -29,6 +29,11 @@ public class AddUserController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {}
 	
+	/**
+	 * Returns user to the landing view
+	 * 
+	 * @param event Contains information of previous view
+	 */
 	@FXML
 	public void back(ActionEvent event) {
 		try {
@@ -42,6 +47,11 @@ public class AddUserController implements Initializable{
 		}
 	}
 	
+	/**
+	 * Adds a new user to the database then returns to the landing view
+	 * 
+	 * @param event
+	 */
 	@FXML
 	public void addUser(ActionEvent event) {
 		try {

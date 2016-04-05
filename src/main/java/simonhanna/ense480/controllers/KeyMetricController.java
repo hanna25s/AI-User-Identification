@@ -13,6 +13,14 @@ public abstract class KeyMetricController {
 	protected int newKey, oldKey;
 	protected double startTime, endTime, timeBetweenKeys;
 	
+	/**
+	 * Used to handle KeyEvents. Determines what the previous and current key are, calculates the time 
+	 * between keys, then saves the metric into the corresponding array.
+	 * 
+	 * @param k           KeyEvent. Used to determine which key was entered
+	 * @param keyMetrics  Which array the metric should be saved into. Can be either the detectUserKeyMetrics
+	 * 					  or the alterProfileKeyMetrics
+	 */
 	public void addKeyMetric(KeyEvent k, KeyMetric[][] keyMetrics) {
 		endTime = (double)System.nanoTime()/1000000000.0;
     	newKey = getKeyGroup(k);

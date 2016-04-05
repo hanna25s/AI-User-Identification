@@ -57,6 +57,11 @@ public class ProfileController extends KeyMetricController implements Initializa
 		currentProfile = null;
 	}
 	
+	/**
+	 * Used to initialize the controller with variables from the previous view
+	 * 
+	 * @param user The user selected on the landing view
+	 */
 	public void initializeController(User user) {
 		System.out.println("Initializing controller");
 		this.currentUser = user;
@@ -69,6 +74,9 @@ public class ProfileController extends KeyMetricController implements Initializa
 		}
 	}
 
+	/**
+	 * Changes currently selected user
+	 */
 	@FXML
 	public void changeUser() {
 		if(userComboBox.getValue() == null) {
@@ -85,6 +93,10 @@ public class ProfileController extends KeyMetricController implements Initializa
 		}
 	}
 	
+	
+	/**
+	 * Adds a new user to the database then reloads the combo box
+	 */
 	@FXML
 	public void addUser() {
 		if(newUserInput.getText() == null || newUserInput.getText().equals("")) {
@@ -99,6 +111,11 @@ public class ProfileController extends KeyMetricController implements Initializa
 		});
 	}
 	
+	/**
+	 * Used to save any new metrics that have been entered, then reset the alterProfileMetricInput
+	 * array. In order for the metrics to be saved, the user must have chosen a valid profile. After
+	 * updating the metrics, this code then retrains all neural networks with the new metrics. 
+	 */
 	@FXML
 	public void saveMetrics() {	
 		currentProfile = profileComboBox.getValue();
@@ -117,6 +134,7 @@ public class ProfileController extends KeyMetricController implements Initializa
 		profileInputStatus.setText("Training");
 		alterProfileMetricInput.setText("");
 		
+		//Run on a new thread to avoid slowing the UI down.
 		new Thread() {
             public void run() {
             	DatabaseService.updateKeyMetrics(currentProfile, alterProfileKeyMetrics);
@@ -132,6 +150,9 @@ public class ProfileController extends KeyMetricController implements Initializa
         }.start();
 	}
 	
+	/**
+	 * Adds a new profile for the currently selected user
+	 */
 	@FXML
 	public void addProfile() {
 		String newProfileName = profileName.getText();
@@ -150,6 +171,9 @@ public class ProfileController extends KeyMetricController implements Initializa
 		});
 	}
 	
+	/**
+	 * Converts the metric array to a list, then calls the NeuralNetwork service to identify the user
+	 */
 	@FXML
 	public void detectUser() {
 		List<KeyMetric> metricList = new ArrayList<KeyMetric>();
@@ -163,11 +187,21 @@ public class ProfileController extends KeyMetricController implements Initializa
 		identifyUserText.setText(detectedUser.getUser().getAlias() + " - " + detectedUser.getProfilename());
 	}
 	
+	/**
+	 * Used to add metrics for training a profile's neural network
+	 * 
+	 * @param k  Used to determine what key was hit
+	 */
 	@FXML
 	public void addProfileKeyMetric(KeyEvent k) {
 		addKeyMetric(k, alterProfileKeyMetrics);
 	}
 	
+	/**
+	 * Used to add metrics for detecting the user
+	 * 
+	 * @param k  Used to determine what key was hit
+	 */
 	@FXML
 	public void addDetectUserKeyMetric(KeyEvent k) {
 		addKeyMetric(k, detectUserKeyMetrics);

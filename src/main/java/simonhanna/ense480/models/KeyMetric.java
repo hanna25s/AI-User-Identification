@@ -87,6 +87,9 @@ public class KeyMetric {
 		return numberOfOccurences;
 	}
 	
+	/**
+	 * Used for testing purposes. Prints out contents of the KeyMetric
+	 */
 	public void writeContents() {
 		System.out.println("Writing KeyMetric contents...");
 		if(this.profile == null) {
